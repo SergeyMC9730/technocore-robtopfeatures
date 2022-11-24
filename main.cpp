@@ -19,24 +19,13 @@ class $implement(MenuLayer, MyMenuLayer) {
 	bool inithook() {
 		if (!_init(this)) return false;
 
-		auto sprite = CCSprite::create("dialogIcon_017.png");
-		auto buttonSprite = CCSprite::createWithSpriteFrameName("GJ_stopEditorBtn_001.png");
+		auto tch = CCLabelBMFont::create("TechnoGDPS RELEASE 1.0", "bigFont.fnt");
+		tch->setPositionY(301);
+		tch->setPositionX(200);
+		tch->setScale(.375f);
+		tch->setAnchorPoint({});
 
-		sprite->setPosition({100, 100});
-		sprite->setScale(0.5f);
-
-		addChild(sprite);
-
-		auto button = CCMenuItemSpriteExtra::create(
-		    buttonSprite,
-		    this,
-		    menu_selector(MyMenuLayer::buttonCallback));
-
-		auto menu = CCMenu::create();
-		menu->addChild(button);
-		menu->setPosition(ccp(150, 100));
-
-		addChild(menu);
+		addChild(tch);
 		return true;
 	}
 
