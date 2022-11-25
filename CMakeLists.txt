@@ -14,6 +14,7 @@ if(ANDROID)
 
     add_library(${MODNAME} SHARED
         android/main.cpp
+        android/gdsymbols.cpp
     )
 
     target_include_directories(${MODNAME} PRIVATE
