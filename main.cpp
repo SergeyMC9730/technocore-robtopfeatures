@@ -143,36 +143,36 @@ void inject() {
 		reinterpret_cast<void*>(extract(&MyMenuLayer::inithook)),
 	    reinterpret_cast<void**>(&MyMenuLayer::_init)
 	);
-	MH_CreateHook(
-	    reinterpret_cast<void*>(base + 0x189370),
-		reinterpret_cast<void*>(extract(&MyLevelTools::getLevelHook)),
-	    reinterpret_cast<void**>(&MyLevelTools::_getLevel)
-	);
-	MH_CreateHook(
-	    reinterpret_cast<void*>(base + 0x189C60),
-		reinterpret_cast<void*>(extract(&MyLevelTools::getAudioTitleHook)),
-	    reinterpret_cast<void**>(&MyLevelTools::_getAudioTitle)
-	);
-	MH_CreateHook(
-	    reinterpret_cast<void*>(base + 0x18A8C0),
-		reinterpret_cast<void*>(extract(&MyLevelTools::getURLForAudio)),
-	    reinterpret_cast<void**>(&MyLevelTools::_getURLForAudio)
-	);
-	MH_CreateHook(
-	    reinterpret_cast<void*>(base + 0x18A2D0),
-		reinterpret_cast<void*>(extract(&MyLevelTools::getArtistForAudio)),
-	    reinterpret_cast<void**>(&MyLevelTools::_getArtistForAudio)
-	);
-	MH_CreateHook(
-	    reinterpret_cast<void*>(base + 0x189FA0),
-		reinterpret_cast<void*>(extract(&MyLevelTools::getAudioFilename)),
-	    reinterpret_cast<void**>(&MyLevelTools::_getAudioFilename)
-	);
-	MH_CreateHook(
-	    reinterpret_cast<void*>(base + 0x18B180),
-		reinterpret_cast<void*>(extract(&MyLevelTools::verifyLevelIntegrity)),
-	    reinterpret_cast<void**>(&MyLevelTools::_verifyLevelIntegrity)
-	);
+	// MH_CreateHook(
+	//     reinterpret_cast<void*>(base + 0x189370),
+	// 	reinterpret_cast<void*>(extract(&MyLevelTools::getLevelHook)),
+	//     reinterpret_cast<void**>(&MyLevelTools::_getLevel)
+	// );
+	// MH_CreateHook(
+	//     reinterpret_cast<void*>(base + 0x189C60),
+	// 	reinterpret_cast<void*>(extract(&MyLevelTools::getAudioTitleHook)),
+	//     reinterpret_cast<void**>(&MyLevelTools::_getAudioTitle)
+	// );
+	// MH_CreateHook(
+	//     reinterpret_cast<void*>(base + 0x18A8C0),
+	// 	reinterpret_cast<void*>(extract(&MyLevelTools::getURLForAudio)),
+	//     reinterpret_cast<void**>(&MyLevelTools::_getURLForAudio)
+	// );
+	// MH_CreateHook(
+	//     reinterpret_cast<void*>(base + 0x18A2D0),
+	// 	reinterpret_cast<void*>(extract(&MyLevelTools::getArtistForAudio)),
+	//     reinterpret_cast<void**>(&MyLevelTools::_getArtistForAudio)
+	// );
+	// MH_CreateHook(
+	//     reinterpret_cast<void*>(base + 0x189FA0),
+	// 	reinterpret_cast<void*>(extract(&MyLevelTools::getAudioFilename)),
+	//     reinterpret_cast<void**>(&MyLevelTools::_getAudioFilename)
+	// );
+	// MH_CreateHook(
+	//     reinterpret_cast<void*>(base + 0x18B180),
+	// 	reinterpret_cast<void*>(extract(&MyLevelTools::verifyLevelIntegrity)),
+	//     reinterpret_cast<void**>(&MyLevelTools::_verifyLevelIntegrity)
+	// );
 	MH_EnableHook(MH_ALL_HOOKS);
 	#endif
 }

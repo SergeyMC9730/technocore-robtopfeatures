@@ -35,3 +35,9 @@ build
 
 # Macos be like
 **/.DS_Store
+
+Binary
+build_a
+out_a
+gd_a
+gdMOD.apk
