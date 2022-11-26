@@ -13,21 +13,21 @@ if(ANDROID)
     project(${MODNAME} VERSION 1.0.0 LANGUAGES CXX)
 
     add_library(${MODNAME} SHARED
-        android/main.cpp
-        android/gdsymbols.cpp
+        main.cpp
+        gdsymbols.cpp
     )
 
     target_include_directories(${MODNAME} PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/android
-        ${CMAKE_CURRENT_SOURCE_DIR}/android/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/android/include/gd
-        ${CMAKE_CURRENT_SOURCE_DIR}/android/include/cocos2dx
-        ${CMAKE_CURRENT_SOURCE_DIR}/android/include/cocos2dx/platform
-        ${CMAKE_CURRENT_SOURCE_DIR}/android/include/cocos2dx/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/android/include/cocos2dx/kazmath/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/android/include/cocos2dx/platform/android
-        ${CMAKE_CURRENT_SOURCE_DIR}/android/include/cocos2dx/platform/third_party/android/prebuit/libcurl/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/android/include/extensions
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/gd
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/cocos2dx
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/cocos2dx/platform
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/cocos2dx/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/cocos2dx/kazmath/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/cocos2dx/platform/android
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/cocos2dx/platform/third_party/android/prebuit/libcurl/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/extensions
     )
 
     target_link_libraries(${MODNAME} ${CMAKE_CURRENT_SOURCE_DIR}/libs/${CMAKE_ANDROID_ARCH_ABI}/libcocos2dcpp.so)

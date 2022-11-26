@@ -1,5 +1,3 @@
 #pragma once
 
-class LevelTools {
-
-};
+class LevelTools {};

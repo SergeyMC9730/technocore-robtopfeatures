@@ -1,4 +1,6 @@
-#include <gd/include/gd.h>
+#ifdef __ANDROID
+
+#include "include/gd/include/gd.h"
 #include "techno.h"
 
 namespace GDSymbols {
@@ -14,3 +16,5 @@ namespace GDSymbols {
         }
     }
 }
+
+#endif

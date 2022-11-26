@@ -1,6 +1,10 @@
 #pragma once
 
+#ifdef __ANDROID__
+#include <dlfcn.h>
 #include "./include/dobby.h"
+#include "./include/gd/include/gd.h"
+#include "./include/cocos2dx/include/cocos2d.h"
 
 #define HOOK_FUNCX(fname, ffunc, ffunc_o) DobbyHook(dlsym(dlopen(GDSymbols::libraryName, RTLD_LAZY), fname), (void *)ffunc, (void **)&ffunc_o);
 #define HOOK_FUNC(fname) HOOK_FUNCX(fname, init, init_o);
@@ -16,3 +20,14 @@ namespace GDSymbols {
     }
     
 }
+#endif
+
+#ifdef _WIN32
+#include "win32cac.h"
+#endif
+
+#if __APPLE__
+	#include <CacKit>
+#endif
+
+using namespace cocos2d;
