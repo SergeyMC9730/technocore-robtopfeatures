@@ -38,9 +38,11 @@ if(ANDROID)
 
     install(TARGETS ${MODNAME} LIBRARY)
 else()
-    project(CrossTemplate VERSION 1.0.0 LANGUAGES CXX)
+    project(TechnoGDPS VERSION 1.0.0 LANGUAGES CXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fms-extensions -Xlinker --no-demangle")
     set(CMAKE_CXX_STANDARD 17)
+
+    # add_subdirectory(modular-objects)
 
     if(APPLE)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
@@ -62,6 +64,7 @@ else()
         set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/out")
         set(CMAKE_BUILD_TYPE RelWithDebInfo)
         add_definitions(-DCC_TARGET_OS_WIN32)
+	add_subdirectory(minhook)
         include_directories(
             gd.h/cocos2dx
             gd.h/include
@@ -76,7 +79,6 @@ else()
             cocos-headers/cocos2dx/platform/third_party/win32/OGLES
             minhook/include
         )
-        add_subdirectory(minhook EXCLUDE_FROM_ALL)
         set(CMAKE_SIZEOF_VOID_P 4)
         set(CMAKE_SYSTEM_PROCESSOR "i686")
         set(CMAKE_GENERATOR_PLATFORM x86)
@@ -84,6 +86,7 @@ else()
 
     add_library(${PROJECT_NAME} SHARED 
         main.cpp
+        GJDialogObject.cpp
     )
 
     if(APPLE)

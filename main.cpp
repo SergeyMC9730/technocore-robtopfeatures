@@ -2,8 +2,17 @@
 
 #include "techno.h"
 #include "LevelTools.h"
+#include "GJDialogObject.h"
 
 namespace Techno {
+	namespace TMessage {
+		void test(CCLayer *l) {
+			#ifndef __ANDROID__
+			DialogObject *dobj = GJDialogObject::create("123", "456", 5, 1.f, false, {100, 100, 100});
+			l->addChild((CCNode *)dobj);
+			#endif
+		}
+	}
 	namespace TMenuLayer {
 		#ifndef __ANDROID__
 		class $implement(MenuLayer, MyMenuLayer) {
@@ -19,6 +28,8 @@ namespace Techno {
 				printf("inithook\n");
 				
 				if (!_init(this)) return false;
+
+				TMessage::test((CCLayer *)this);
 
 				auto tch = CCLabelBMFont::create("TechnoGDPS RELEASE 1.0", "bigFont.fnt");
 				tch->setPositionY(301);
@@ -72,7 +83,7 @@ namespace Techno {
 			static inline int		   (__thiscall *_getArtistForAudio)(LevelTools *self, int aid);
 			static inline const char* (__thiscall *_getURLForAudio)(LevelTools *self, int aid);
 			static inline const char*  (__thiscall *_getAudioFilename)(LevelTools *self, int aid);
-			static inline bool         (__thiscall *_verifyLevelIntegrity)(LevelTools *self, int lid);
+			static inline bool         (__thiscall *_verifyLevelIntegrity)(int lid);
 
 			const char *getAudioTitleHook(int aid) {
 				printf("getAudioTitleHook %d\n", aid);
@@ -163,40 +174,50 @@ namespace Techno {
 		#endif
 		void applyHooks() {
 			#ifndef __ANDROID__
-			MH_CreateHook(
-			    reinterpret_cast<void*>(base + 0x189370),
-				reinterpret_cast<void*>(extract(&MyLevelTools::getLevelHook)),
-			    reinterpret_cast<void**>(&MyLevelTools::_getLevel)
-			);
-			MH_CreateHook(
-			    reinterpret_cast<void*>(base + 0x189C60),
-				reinterpret_cast<void*>(extract(&MyLevelTools::getAudioTitleHook)),
-			    reinterpret_cast<void**>(&MyLevelTools::_getAudioTitle)
-			);
-			MH_CreateHook(
-			    reinterpret_cast<void*>(base + 0x18A8C0),
-				reinterpret_cast<void*>(extract(&MyLevelTools::getURLForAudio)),
-			    reinterpret_cast<void**>(&MyLevelTools::_getURLForAudio)
-			);
-			MH_CreateHook(
-			    reinterpret_cast<void*>(base + 0x18A2D0),
-				reinterpret_cast<void*>(extract(&MyLevelTools::getArtistForAudio)),
-			    reinterpret_cast<void**>(&MyLevelTools::_getArtistForAudio)
-			);
-			MH_CreateHook(
-			    reinterpret_cast<void*>(base + 0x189FA0),
-				reinterpret_cast<void*>(extract(&MyLevelTools::getAudioFilename)),
-			    reinterpret_cast<void**>(&MyLevelTools::_getAudioFilename)
-			);
-			MH_CreateHook(
-			    reinterpret_cast<void*>(base + 0x18B180),
-				reinterpret_cast<void*>(extract(&MyLevelTools::verifyLevelIntegrity)),
-			    reinterpret_cast<void**>(&MyLevelTools::_verifyLevelIntegrity)
-			);
+			// MH_CreateHook(
+			//     reinterpret_cast<void*>(base + 0x189370),
+			// 	reinterpret_cast<void*>(extract(&MyLevelTools::getLevelHook)),
+			//     reinterpret_cast<void**>(&MyLevelTools::_getLevel)
+			// );
+			// MH_CreateHook(
+			//     reinterpret_cast<void*>(base + 0x189C60),
+			// 	reinterpret_cast<void*>(extract(&MyLevelTools::getAudioTitleHook)),
+			//     reinterpret_cast<void**>(&MyLevelTools::_getAudioTitle)
+			// );
+			// MH_CreateHook(
+			//     reinterpret_cast<void*>(base + 0x18A8C0),
+			// 	reinterpret_cast<void*>(extract(&MyLevelTools::getURLForAudio)),
+			//     reinterpret_cast<void**>(&MyLevelTools::_getURLForAudio)
+			// );
+			// MH_CreateHook(
+			//     reinterpret_cast<void*>(base + 0x18A2D0),
+			// 	reinterpret_cast<void*>(extract(&MyLevelTools::getArtistForAudio)),
+			//     reinterpret_cast<void**>(&MyLevelTools::_getArtistForAudio)
+			// );
+			// MH_CreateHook(
+			//     reinterpret_cast<void*>(base + 0x189FA0),
+			// 	reinterpret_cast<void*>(extract(&MyLevelTools::getAudioFilename)),
+			//     reinterpret_cast<void**>(&MyLevelTools::_getAudioFilename)
+			// );
+			// MH_CreateHook(
+			//     reinterpret_cast<void*>(base + 0x18B180),
+			// 	reinterpret_cast<void*>(extract(&MyLevelTools::verifyLevelIntegrity)),
+			//     reinterpret_cast<void**>(&MyLevelTools::_verifyLevelIntegrity)
+			// );
 			#else
 
 			#endif
 		}
+	}
+	namespace TGameObject {
+		void applyHooks() {
+			
+		}
+	}
+	void applyHooks() {
+		Techno::TMenuLayer::applyHooks();
+		Techno::TLevelTools::applyHooks();
+		Techno::TGameObject::applyHooks();
 	}
 }
 
@@ -204,6 +225,8 @@ void inject() {
 	#if _WIN32
 	auto base = reinterpret_cast<uintptr_t>(GetModuleHandle(0));
 	
+	Techno::applyHooks();
+
 	MH_EnableHook(MH_ALL_HOOKS);
 	#endif
 }
@@ -214,7 +237,6 @@ void inject() {
 
 #ifdef __ANDROID__
 __attribute__((constructor)) void libinit(){
-    Techno::TMenuLayer::applyHooks();
-	Techno::TLevelTools::applyHooks();
+    Techno::applyHooks();
 }
 #endif

@@ -24,6 +24,7 @@ namespace GDSymbols {
 
 #ifdef _WIN32
 #include "win32cac.h"
+#include "MinHook.h"
 #endif
 
 #if __APPLE__

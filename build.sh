@@ -23,11 +23,12 @@ TASK_WINDOWS() {
     -DCMAKE_BUILD_TYPE=Release -B build
     
   cmake --build ${UPWD}/build --config Release
-  cp ${UPWD}/build/CrossTemplate.dll "/home/dog/.wine/drive_c/Program Files (x86)/VOIDSERVER/GDVS/gdvs-dll/techno.21.dll"
+  cp ${UPWD}/build/TechnoGDPS.dll "/home/dog/.wine/drive_c/Program Files (x86)/VOIDSERVER/GDVS/gdvs-dll/techno.21.dll"
 }
 TASK_ANDROID() {
   export NDK="/home/dog/ASDK/r17c"
   adb shell pm uninstall -k com.technogdps.geometryjump &
+  adb shell pm uninstall -k com.technogdps21.geometryjump &
   rm -rf ${UPWD}/build_a ${UPWD}/out_a gd_a gdMOD.apk
   mkdir ${UPWD}/build_a
   mkdir ${UPWD}/out_a
@@ -63,7 +64,7 @@ TASK_ANDROID() {
   rm -rf ${UPWD}/build_a ${UPWD}/out_a &
 
   adb install ${UPWD}/gdMOD.apk
-  adb shell am start -a android.intent.action.MAIN -n com.technogdps.geometryjump/com.technogdps.geometryjump.GeometryJump
+  adb shell am start -a android.intent.action.MAIN -n com.technogdps21.geometryjump/com.technogdps21.geometryjump.GeometryJump
 }
 
 TASK_WINDOWS &
