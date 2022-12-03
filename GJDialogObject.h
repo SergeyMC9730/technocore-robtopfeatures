@@ -7,6 +7,7 @@
 #include <array>
 
 // OH GOD
+#ifndef __ANDROID
 class GJDialogObject : public DialogObject {
 public:
     static DialogObject *create(std::string const& a, std::string const& b, int c, float d, bool l, cocos2d::_ccColor3B const& color) {
@@ -46,3 +47,5 @@ public:
         #endif
     }
 };
+
+#endif

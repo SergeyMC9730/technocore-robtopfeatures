@@ -1,0 +1,1 @@
+cd "/home/dog/.wine/drive_c/Program Files (x86)/VOIDSERVER/GDVS/"
