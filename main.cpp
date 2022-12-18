@@ -3,6 +3,7 @@
 #include "techno.h"
 #include "LevelTools.h"
 #include "CreatorLayer.h"
+#include "networking.h"
 // #include "GJDialogObject.h"
 
 #ifndef __ANDROID__
@@ -39,14 +40,45 @@ namespace Techno {
 		}
 	}
 	namespace TMenuLayer {
+		class MenuLayer_TestAction : public FLAlertLayerProtocol {
+		private:
+			CCObject *pTarget;
+		public:
+			void setTarget(CCObject *target) {
+				pTarget = target;
+			}
+	
+			void FLAlert_Clicked(FLAlertLayer *alertlayer, bool btn2) {
+				SimpleHTTPRequestLayer *l = (SimpleHTTPRequestLayer *)pTarget;
+
+				l->close();
+
+				alertlayer->removeMeAndCleanup();
+			};
+		};
+
 		#ifndef __ANDROID__
+
 		class $implement(MenuLayer, MyMenuLayer) {
 		public:
 			static inline bool(__thiscall * _init)(MenuLayer * self);
 
-			void buttonCallback(CCObject * sender) {
-				auto alert = FLAlertLayer::create(NULL, "Mod", "Ok", NULL, "<cg>custom button!</c>");
+			static void buttonCallback(CCObject * sender) {
+				MenuLayer_TestAction *action = new MenuLayer_TestAction;
+
+				action->setTarget(sender);
+
+				auto alert = FLAlertLayer::create(action, "Mod", "Ok", NULL, "<cg>custom button!</c>");
 				alert->show();
+			}
+
+			void nCallback(CCHttpClient* client, CCHttpResponse* response) {
+				// SimpleHTTPRequestLayer *l = (SimpleHTTPRequestLayer *)(response->getHttpRequest()->getTarget());
+
+				// l->close();
+				MyMenuLayer::buttonCallback(response->getHttpRequest()->getTarget());
+
+				return;
 			}
 
 			bool inithook() {
@@ -64,6 +96,12 @@ namespace Techno {
 				tch->setAnchorPoint({});
 
 				addChild(tch);
+
+				SimpleHTTPRequestLayer *l = SimpleHTTPRequestLayer::create();
+				l->start("https://example.com", httpresponse_selector(MyMenuLayer::nCallback));
+
+				addChild(l, 1024);
+
 				return true;
 			}
 

@@ -7,3 +7,6 @@
 [submodule "minhook"]
 	path = minhook
 	url = https://github.com/TsudaKageyu/minhook
+[submodule "curl"]
+	path = curl
+	url = https://github.com/curl/curl.git

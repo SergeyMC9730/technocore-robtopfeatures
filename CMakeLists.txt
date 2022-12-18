@@ -16,6 +16,7 @@ if(ANDROID)
         main.cpp
         gdsymbols.cpp
         bytepatch.cpp
+        networking.cpp
     )
 
     target_include_directories(${MODNAME} PRIVATE
@@ -88,6 +89,7 @@ else()
     add_library(${PROJECT_NAME} SHARED 
         main.cpp
         GJDialogObject.cpp
+        networking.cpp
     )
 
     if(APPLE)
