@@ -3,6 +3,7 @@
 #include "techno.h"
 #include "LevelTools.h"
 #include "CreatorLayer.h"
+#include "InfoLayer.h"
 #include "networking.h"
 // #include "GJDialogObject.h"
 
@@ -31,6 +32,26 @@ namespace Cvolton {
 #endif
 
 namespace Techno {
+	namespace TInfoLayer {
+		#ifndef __ANDROID__
+		void __fastcall onComment(InfoLayer *self, CCObject *sender) {
+			// GJAccountManager *ss = GJAccountManager::sharedState();
+			// int a = ss->getAccountID();
+			// if(a == 0) { // unregistered
+			// 	ss->setAccountID(65535);
+			// }
+			// Cvolton::MHook::getOriginal(onComment)(self, sender);
+			// //ss->setAccountID(a);
+
+			// return;
+		}
+		#endif
+		void applyHooks() {
+			#ifndef __ANDROID__
+			// Cvolton::MHook::registerHook(base + 0x151600, onComment);
+			#endif
+		}
+	}
 	namespace TMessage {
 		void test(CCLayer *l) {
 			#ifndef __ANDROID__
@@ -62,13 +83,14 @@ namespace Techno {
 		class $implement(MenuLayer, MyMenuLayer) {
 		public:
 			static inline bool(__thiscall * _init)(MenuLayer * self);
+			static inline void(__thiscall * _onPlay)(CCObject *sender);
 
 			static void buttonCallback(CCObject * sender) {
 				MenuLayer_TestAction *action = new MenuLayer_TestAction;
 
 				action->setTarget(sender);
 
-				auto alert = FLAlertLayer::create(action, "Mod", "Ok", NULL, "<cg>custom button!</c>");
+				auto alert = FLAlertLayer::create(action, "Error", "Ok", NULL, "New levels will be added after <cg>CC!</c>");
 				alert->show();
 			}
 
@@ -81,26 +103,41 @@ namespace Techno {
 				return;
 			}
 
+			void onPlay(CCObject *sender) {
+				SimpleHTTPRequestLayer *l = SimpleHTTPRequestLayer::create();
+				l->start("https://gd.dogotrigger.xyz/tech21/getOfficialLevels21.php", httpresponse_selector(MyMenuLayer::nCallback));
+
+				CCNode *cn = (CCNode *)sender;
+
+				cn->addChild(l, 1024);
+
+				l->m_pLC->setPosition(cn->getPositionX(), cn->getPositionY());
+				l->setPosition(56, 56);
+			}
+
 			bool inithook() {
 				printf("inithook\n");
 
 				if (!_init(this))
 					return false;
 
+				// GJAccountManager *ss = GJAccountManager::sharedState();
+				// int a = ss->getAccountID();
+				// if(a == 0) { // unregistered
+				// 	ss->setAccountID(65535);
+				// }
+
 				TMessage::test((CCLayer *)this);
 
-				auto tch = CCLabelBMFont::create("TechnoGDPS RELEASE 1.0", "bigFont.fnt");
-				tch->setPositionY(301);
-				tch->setPositionX(200);
+				CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+
+				auto tch = CCLabelBMFont::create("TechnoGDPS BETA BUILD 1.0", "bigFont.fnt");
+				tch->setPositionY(300);
+				tch->setPositionX(winSize.width / 2);
 				tch->setScale(.375f);
-				tch->setAnchorPoint({});
+				tch->setAnchorPoint({0.5f, 0.f});
 
 				addChild(tch);
-
-				SimpleHTTPRequestLayer *l = SimpleHTTPRequestLayer::create();
-				l->start("https://example.com", httpresponse_selector(MyMenuLayer::nCallback));
-
-				addChild(l, 1024);
 
 				return true;
 			}
@@ -114,17 +151,50 @@ namespace Techno {
 		};
 		#else
 		bool (*init_o)(MenuLayer *);
+		void(* _onPlay)(MenuLayer *self, CCObject *sender);
+
+		class MenuLayer_IOActions {
+		public:
+			static void buttonCallback(CCObject * sender) {
+				MenuLayer_TestAction *action = new MenuLayer_TestAction;
+
+				action->setTarget(sender);
+
+				auto alert = FLAlertLayer::create(action, "Error", "Ok", NULL, "New levels will be added after <cg>CC!</c>");
+				alert->show();
+			}
+
+			void nCallback(CCHttpClient* client, CCHttpResponse* response) {
+				MenuLayer_IOActions::buttonCallback(response->getHttpRequest()->getTarget());
+
+				return;
+			}
+		};
+
+		void onPlay(MenuLayer *self, CCObject *sender) {
+			SimpleHTTPRequestLayer *l = SimpleHTTPRequestLayer::create();
+			l->start("https://gd.dogotrigger.xyz/tech21/getOfficialLevels21.php", httpresponse_selector(MenuLayer_IOActions::nCallback));
+
+			CCNode *cn = (CCNode *)sender;
+
+			cn->addChild(l, 1024);
+
+			l->m_pLC->setPosition(cn->getPositionX(), cn->getPositionY());
+			l->setPosition(56, 56);
+		}
 
 		bool init(MenuLayer *self)
 		{
 			if (!init_o(self))
 				return false;
 
-			auto tch = CCLabelBMFont::create("TechnoGDPS RELEASE 1.0", "bigFont.fnt");
-			tch->setPositionY(301);
-			tch->setPositionX(200);
+			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+
+			auto tch = CCLabelBMFont::create("TechnoGDPS BETA BUILD 1.0", "bigFont.fnt");
+			tch->setPositionY(300);
+			tch->setPositionX(winSize.width / 2);
 			tch->setScale(.375f);
-			tch->setAnchorPoint({});
+			tch->setAnchorPoint({0.5f, 0.f});
 
 			self->addChild(tch);
 
@@ -139,8 +209,14 @@ namespace Techno {
 				reinterpret_cast<void *>(extract(&MyMenuLayer::inithook)),
 				reinterpret_cast<void **>(&MyMenuLayer::_init)
 			);
+			MH_CreateHook(
+				reinterpret_cast<void *>(base + 0x191b50),
+				reinterpret_cast<void *>(extract(&MyMenuLayer::onPlay)),
+				reinterpret_cast<void **>(&MyMenuLayer::_onPlay)
+			);
 			#else
 			HOOK_FUNC("_ZN9MenuLayer4initEv");
+			HOOK_FUNCX("_ZN9MenuLayer6onPlayEPN7cocos2d8CCObject", onPlay, _onPlay);
 			#endif
 		}
 	}
@@ -180,12 +256,12 @@ namespace Techno {
 
 			switch(arch) {
 				case 1: {
-					//ss->patch(AS_ADDRESS(0x0022cbbc), 0x17);
-					// ss->patch(AS_ADDRESS(0x0022cc34), 0x17);
-					// ss->patch(AS_ADDRESS(0x0022f5c4), 0x17);
-					// ss->patch(AS_ADDRESS(0x0022fab2), 0x17);
+					ss->patch(AS_ADDRESS(0x0022cbbc), 0x17);
+					ss->patch(AS_ADDRESS(0x0022cc34), 0x17);
+					ss->patch(AS_ADDRESS(0x0022f5c4), 0x17);
+					ss->patch(AS_ADDRESS(0x0022fab2), 0x17);
 					ss->patch(AS_ADDRESS(0x002d0f1a), 0x17);
-					// ss->patch(AS_ADDRESS(0x002d3df0), 0x17);
+					ss->patch(AS_ADDRESS(0x002d3df0), 0x17);
 					break;
 				}
 				case 2: {
@@ -282,6 +358,7 @@ namespace Techno {
 		Techno::TLevelTools::applyHooks();
 		Techno::TGameObject::applyHooks();
 		Techno::TCreatorLayer::applyHooks();
+		Techno::TInfoLayer::applyHooks();
 	}
 }
 
