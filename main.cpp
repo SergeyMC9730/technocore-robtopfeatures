@@ -32,6 +32,60 @@ namespace Cvolton {
 #endif
 
 namespace Techno {
+	namespace TKeysLayer {
+		#ifndef __ANDROID__
+		bool __thiscall init(CCLayer *self) {
+			if(!Cvolton::MHook::getOriginal(init)(self)) return false;
+
+			self->sortAllChildren();
+			auto shop1_00 = (CCNode *)(self->getChildren()->objectAtIndex(3));
+			shop1_00->sortAllChildren();
+			auto shop1_01 = (CCNode *)(shop1_00->getChildren()->objectAtIndex(0));
+			shop1_01->sortAllChildren();
+			auto shop1_02 = (CCNode *)(shop1_01->getChildren()->objectAtIndex(22));
+			shop1_02->sortAllChildren();
+			auto shop1_03 = (CCNode *)(shop1_02->getChildren()->objectAtIndex(0));
+			shop1_03->sortAllChildren();
+			auto shop1_04 = (CCNode *)(shop1_03->getChildren()->objectAtIndex(0));
+			auto shop2_04 = (CCNode *)(shop1_03->getChildren()->objectAtIndex(1));
+
+			shop1_04->setPositionX(0.f);
+			shop2_04->removeMeAndCleanup();
+
+			return true;
+		}
+		#else
+		bool (*_init)(CCLayer *self);
+
+		bool init(CCLayer *self) {
+			if(!_init(self)) return false;
+
+			self->sortAllChildren();
+			auto shop1_00 = (CCNode *)(self->getChildren()->objectAtIndex(3));
+			shop1_00->sortAllChildren();
+			auto shop1_01 = (CCNode *)(shop1_00->getChildren()->objectAtIndex(0));
+			shop1_01->sortAllChildren();
+			auto shop1_02 = (CCNode *)(shop1_01->getChildren()->objectAtIndex(22));
+			shop1_02->sortAllChildren();
+			auto shop1_03 = (CCNode *)(shop1_02->getChildren()->objectAtIndex(0));
+			shop1_03->sortAllChildren();
+			auto shop1_04 = (CCNode *)(shop1_03->getChildren()->objectAtIndex(0));
+			auto shop2_04 = (CCNode *)(shop1_03->getChildren()->objectAtIndex(1));
+
+			shop1_04->setPositionX(0.f);
+			shop2_04->removeMeAndCleanup();
+
+			return true;
+		}
+		#endif
+		void applyHooks() {
+			#ifndef __ANDROID__
+			Cvolton::MHook::registerHook(base + 0x154560, init);
+			#else
+			HOOK_FUNCX("_ZN9KeysLayer4initEv", init, _init);
+			#endif
+		}
+	}
 	namespace TInfoLayer {
 		#ifndef __ANDROID__
 		void __fastcall onComment(InfoLayer *self, CCObject *sender) {
@@ -151,37 +205,36 @@ namespace Techno {
 		};
 		#else
 		bool (*init_o)(MenuLayer *);
-		void(* _onPlay)(MenuLayer *self, CCObject *sender);
 
 		class MenuLayer_IOActions {
 		public:
 			static void buttonCallback(CCObject * sender) {
 				MenuLayer_TestAction *action = new MenuLayer_TestAction;
 
-				action->setTarget(sender);
+				CCLayer *cl = (CCLayer *)sender;
 
-				auto alert = FLAlertLayer::create(action, "Error", "Ok", NULL, "New levels will be added after <cg>CC!</c>");
-				alert->show();
+				cl->removeMeAndCleanup();
 			}
-
 			void nCallback(CCHttpClient* client, CCHttpResponse* response) {
+				// SimpleHTTPRequestLayer *l = (SimpleHTTPRequestLayer *)(response->getHttpRequest()->getTarget());
+
+				// l->close();
 				MenuLayer_IOActions::buttonCallback(response->getHttpRequest()->getTarget());
 
 				return;
 			}
+			void onPlay(CCObject *sender) {
+				SimpleHTTPRequestLayer *l = SimpleHTTPRequestLayer::create();
+				l->start("https://gd.dogotrigger.xyz/tech21/getOfficialLevels21.php", httpresponse_selector(MenuLayer_IOActions::nCallback));
+
+				CCNode *cn = (CCNode *)sender;
+
+				cn->addChild(l, 1024);
+
+				l->m_pLC->setPosition(cn->getPositionX(), cn->getPositionY());
+				l->setPosition(56, 56);
+			}
 		};
-
-		void onPlay(MenuLayer *self, CCObject *sender) {
-			SimpleHTTPRequestLayer *l = SimpleHTTPRequestLayer::create();
-			l->start("https://gd.dogotrigger.xyz/tech21/getOfficialLevels21.php", httpresponse_selector(MenuLayer_IOActions::nCallback));
-
-			CCNode *cn = (CCNode *)sender;
-
-			cn->addChild(l, 1024);
-
-			l->m_pLC->setPosition(cn->getPositionX(), cn->getPositionY());
-			l->setPosition(56, 56);
-		}
 
 		bool init(MenuLayer *self)
 		{
@@ -197,6 +250,37 @@ namespace Techno {
 			tch->setAnchorPoint({0.5f, 0.f});
 
 			self->addChild(tch);
+
+			self->sortAllChildren();
+			// auto shop1_00 = (CCNode *)(self->getChildren()->objectAtIndex(3));
+			// shop1_00->sortAllChildren();
+			// auto shop1_01 = (CCNode *)(shop1_00->getChildren()->objectAtIndex(0));
+			// shop1_01->sortAllChildren();
+			// auto shop1_02 = (CCNode *)(shop1_01->getChildren()->objectAtIndex(22));
+			// shop1_02->sortAllChildren();
+			// auto shop1_03 = (CCNode *)(shop1_02->getChildren()->objectAtIndex(0));
+			// shop1_03->sortAllChildren();
+			// auto shop1_04 = (CCNode *)(shop1_03->getChildren()->objectAtIndex(0));
+			// auto shop2_04 = (CCNode *)(shop1_03->getChildren()->objectAtIndex(1));
+
+			// shop1_04->setPositionX(0.f);
+			// shop2_04->removeMeAndCleanup();
+			auto pb00 = (CCNode *)(self->getChildren()->objectAtIndex(2));
+			pb00->sortAllChildren();
+			auto pb01 = (CCNode *)(self->getChildren()->objectAtIndex(0));
+
+			pb01->removeMeAndCleanup();
+
+			CCMenu *men = CCMenu::create();
+			CCSprite* PlaySprite = CCSprite::createWithSpriteFrameName("GJ_playBtn_001.png");
+			CCMenuItemSpriteExtra *Play = CCMenuItemSpriteExtra::create(
+				PlaySprite,
+				PlaySprite,
+				PlaySprite,
+				menu_selector(MenuLayer_IOActions::onPlay)
+			);
+			men->addChild(Play);
+			pb00->addChild(men);
 
 			return true;
 		}
@@ -216,7 +300,7 @@ namespace Techno {
 			);
 			#else
 			HOOK_FUNC("_ZN9MenuLayer4initEv");
-			HOOK_FUNCX("_ZN9MenuLayer6onPlayEPN7cocos2d8CCObject", onPlay, _onPlay);
+			// HOOK_FUNCX("_ZN9MenuLayer6onPlayEPN7cocos2d8CCObject", onPlay, _onPlay);
 			#endif
 		}
 	}
@@ -345,10 +429,71 @@ namespace Techno {
 
 			return true;
 		}
+		#else
+		bool (*_init)(CCLayer *self);
+
+		bool init(CCLayer *self) {
+			if(!_init(self)) return false;
+
+			CCObject *obj = NULL;
+			CCNode* node = NULL;
+			CCNode *node_to_remove = NULL;
+			CCARRAY_FOREACH(self->getChildren(), obj) {
+				node = (CCNode *)obj;
+				if(node->getPositionX() == 284.5f && node->getPositionY() == 160.f) {
+					CCObject *obj2 = NULL;
+					CCNode *node2 = NULL;
+					CCARRAY_FOREACH(node->getChildren(), obj2) {
+						node2 = (CCNode *)obj2;
+						if(CHECKPOS(-100.f, 97.f)) { // 0
+							node2->setPositionX(-110.f);
+							node2->setPositionY(97.f);	
+						}
+						if(CHECKPOS(0.f, 97.f)) { // 1
+							node2->setPositionX(-1.f);
+						}
+						if(CHECKPOS(100.f, 97.f)) { // 2
+							node2->setPositionX(109.f);
+						}
+						if(CHECKPOS(-150.f, 0.f)) { // 3
+							node2->setPositionX(-160.f);
+						}
+						if(CHECKPOS(-50.f, 0.f)) { // 4
+							node2->setPositionX(-52.f);
+						}
+						if(CHECKPOS(50.f, 0.f)) { // 5
+							node_to_remove = node2;
+						}
+						if(CHECKPOS(-150.f, -97.f)) { // 6
+							node2->setPositionX(-113.f);
+						}
+						if(CHECKPOS(-50.f, -97.f)) { // 7
+							node2->setPositionX(-1.f);
+						}
+						if(CHECKPOS(50.f, -97.f)) { // 8
+							node2->setPositionX(56.f);
+							node2->setPositionY(0.f);
+						}
+						if(CHECKPOS(150.f, -97.f)) { // 9
+							node2->setPositionX(112.f);
+						}
+						if(CHECKPOS(150.f, 0.f)) { // 10
+							node2->setPositionX(165.f);
+						}
+					}
+				}
+			}
+
+			node_to_remove->removeMeAndCleanup();
+
+			return true;
+		}
 		#endif
 		void applyHooks() {
 			#ifndef __ANDROID__
 			Cvolton::MHook::registerHook(base + 0x4DE40, init);
+			#else
+			HOOK_FUNCX("_ZN12CreatorLayer4initEv", init, _init);
 			#endif
 		}
 	}	
@@ -359,6 +504,7 @@ namespace Techno {
 		Techno::TGameObject::applyHooks();
 		Techno::TCreatorLayer::applyHooks();
 		Techno::TInfoLayer::applyHooks();
+		Techno::TKeysLayer::applyHooks();
 	}
 }
 
