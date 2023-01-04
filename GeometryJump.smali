@@ -1,4 +1,4 @@
-.class public Lcom/technogdps21/geometryjump/GeometryJump;
+.class public Lcom/tgdps21/geometryjump/GeometryJump;
 .super Lorg/cocos2dx/lib/Cocos2dxActivity;
 .source "GeometryJump.java"
 

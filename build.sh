@@ -27,8 +27,8 @@ TASK_WINDOWS() {
 }
 TASK_ANDROID() {
   export NDK="/home/dog/ASDK/r17c"
-  adb shell pm uninstall -k com.technogdps.geometryjump &
   adb shell pm uninstall -k com.technogdps21.geometryjump &
+  adb shell pm uninstall -k com.tgdps21.geometryjump &
   rm -rf ${UPWD}/build_a ${UPWD}/out_a gd_a gdMOD.apk
   mkdir ${UPWD}/build_a
   mkdir ${UPWD}/out_a
@@ -53,8 +53,10 @@ TASK_ANDROID() {
   apktool d ${UPWD}/Binary/gd.apk
   mv ${UPWD}/gd ${UPWD}/gd_a
   cp -r ${UPWD}/out_a/* ${UPWD}/gd_a/lib/
-  cp ${UPWD}/GeometryJump.smali ${UPWD}/gd_a/smali/com/robtopx/geometryjump/
+  cp ${UPWD}/GeometryJump.smali ${UPWD}/gd_a/smali/com/tgdps21/geometryjump/
   cp ${UPWD}/LevelData.plist ${UPWD}/gd_a/assets/
+  cp ${UPWD}/levelCustomizer.json ${UPWD}/gd_a/assets/
+  cp ${UPWD}/TimeMachine2.mp3 ${UPWD}/gd_a/assets/
   cp ${UPWD}/AndroidManifest.xml ${UPWD}/gd_a/
   apktool b ${UPWD}/gd_a
   cp ${UPWD}/gd_a/dist/gd.apk ${UPWD}/gdMOD.apk
@@ -65,7 +67,7 @@ TASK_ANDROID() {
   rm -rf ${UPWD}/build_a ${UPWD}/out_a &
 
   adb install ${UPWD}/gdMOD.apk
-  adb shell am start -a android.intent.action.MAIN -n com.technogdps21.geometryjump/com.technogdps21.geometryjump.GeometryJump
+  adb shell am start -a android.intent.action.MAIN -n com.tgdps21.geometryjump/com.tgdps21.geometryjump.GeometryJump
 }
 
 TASK_WINDOWS &

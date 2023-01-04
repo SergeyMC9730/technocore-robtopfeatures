@@ -169,7 +169,7 @@ void pageHook(LevelPage* self, GJGameLevel* lvl) {
 			if (levelInfo.names[lvl->levelID_rand - lvl->levelID_seed] != "")
 				lvl->levelName = levelInfo.names[lvl->levelID_rand - lvl->levelID_seed];
 			else
-			lvl->levelName = "Unknown";
+			lvl->levelName = "Unknown ";
 			lvl->stars_rand = 1000;
 			lvl->stars_seed = 1000 - levelInfo.stars[lvl->levelID_rand - lvl->levelID_seed];
 			
