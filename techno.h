@@ -6,7 +6,6 @@
 #include "./include/gd/include/gd.h"
 #include "./include/cocos2dx/include/cocos2d.h"
 // #include <cpu-features.h>
-#include "bytepatch.h"
 
 #define HOOK_FUNCX(fname, ffunc, ffunc_o) DobbyHook(dlsym(dlopen("libcocos2dcpp.so", RTLD_LAZY), fname), (void *)ffunc, (void **)&ffunc_o);
 #define HOOK_FUNC(fname) HOOK_FUNCX(fname, init, init_o);

@@ -5,6 +5,7 @@
 #include "CreatorLayer.h"
 #include "InfoLayer.h"
 #include "networking.h"
+#include "Rainix/LC/main.h"
 // #include "GJDialogObject.h"
 
 #ifndef __ANDROID__
@@ -158,6 +159,9 @@ namespace Techno {
 			}
 
 			void onPlay(CCObject *sender) {
+				// _onPlay(sender);
+				// return;
+
 				SimpleHTTPRequestLayer *l = SimpleHTTPRequestLayer::create();
 				l->start("https://gd.dogotrigger.xyz/tech21/getOfficialLevels21.php", httpresponse_selector(MyMenuLayer::nCallback));
 
@@ -265,22 +269,22 @@ namespace Techno {
 
 			// shop1_04->setPositionX(0.f);
 			// shop2_04->removeMeAndCleanup();
-			auto pb00 = (CCNode *)(self->getChildren()->objectAtIndex(2));
-			pb00->sortAllChildren();
-			auto pb01 = (CCNode *)(self->getChildren()->objectAtIndex(0));
+			// auto pb00 = (CCNode *)(self->getChildren()->objectAtIndex(2));
+			// pb00->sortAllChildren();
+			// auto pb01 = (CCNode *)(self->getChildren()->objectAtIndex(0));
 
-			pb01->removeMeAndCleanup();
+			// pb01->removeMeAndCleanup();
 
-			CCMenu *men = CCMenu::create();
-			CCSprite* PlaySprite = CCSprite::createWithSpriteFrameName("GJ_playBtn_001.png");
-			CCMenuItemSpriteExtra *Play = CCMenuItemSpriteExtra::create(
-				PlaySprite,
-				PlaySprite,
-				PlaySprite,
-				menu_selector(MenuLayer_IOActions::onPlay)
-			);
-			men->addChild(Play);
-			pb00->addChild(men);
+			// CCMenu *men = CCMenu::create();
+			// CCSprite* PlaySprite = CCSprite::createWithSpriteFrameName("GJ_playBtn_001.png");
+			// CCMenuItemSpriteExtra *Play = CCMenuItemSpriteExtra::create(
+				// PlaySprite,
+				// PlaySprite,
+				// PlaySprite,
+				// menu_selector(MenuLayer_IOActions::onPlay)
+			// );
+			// men->addChild(Play);
+			// pb00->addChild(men);
 
 			return true;
 		}
@@ -293,11 +297,11 @@ namespace Techno {
 				reinterpret_cast<void *>(extract(&MyMenuLayer::inithook)),
 				reinterpret_cast<void **>(&MyMenuLayer::_init)
 			);
-			MH_CreateHook(
-				reinterpret_cast<void *>(base + 0x191b50),
-				reinterpret_cast<void *>(extract(&MyMenuLayer::onPlay)),
-				reinterpret_cast<void **>(&MyMenuLayer::_onPlay)
-			);
+			// MH_CreateHook(
+				// reinterpret_cast<void *>(base + 0x191b50),
+				// reinterpret_cast<void *>(extract(&MyMenuLayer::onPlay)),
+				// reinterpret_cast<void **>(&MyMenuLayer::_onPlay)
+			// );
 			#else
 			HOOK_FUNC("_ZN9MenuLayer4initEv");
 			// HOOK_FUNCX("_ZN9MenuLayer6onPlayEPN7cocos2d8CCObject", onPlay, _onPlay);
@@ -305,63 +309,44 @@ namespace Techno {
 		}
 	}
 	namespace TLevelTools {
-
-
-		#ifdef __ANDROID__
-		void* (*_getLevel)(LevelTools *self, int, bool);
-
-		void* getLevel(LevelTools *self, int lvl_id, bool a1) {
-			switch(lvl_id) {
-				case 22: {
-					auto level = GJGameLevel::create();
-					level->levelName =  "Time Machine 2";
-					level->difficulty = (4);
-					level->audioTrack = (19);
-					level->stars      = (12);
-					return level;
-				}
-			}
-			return _getLevel(self, lvl_id, a1);
-		}
-		#endif
 		void applyHooks() {
-			int arch = 0;
+			// int arch = 0;
 			
-			#ifdef __arm__
-			arch = 1;
-			#endif
-			#ifdef __i386
-			arch = 2;
-			#endif
+			// #ifdef __arm__
+			// arch = 1;
+			// #endif
+			// #ifdef __i386
+			// arch = 2;
+			// #endif
 
-			#ifdef __ANDROID__
-			HOOK_FUNCX("_ZN10LevelTools8getLevelEib", getLevel, _getLevel);
-			PatchManager *ss = PatchManager::getSharedState();
+			// #ifdef __ANDROID__
+			// HOOK_FUNCX("_ZN10LevelTools8getLevelEib", getLevel, _getLevel);
+			// PatchManager *ss = PatchManager::getSharedState();
 
-			switch(arch) {
-				case 1: {
-					ss->patch(AS_ADDRESS(0x0022cbbc), 0x17);
-					ss->patch(AS_ADDRESS(0x0022cc34), 0x17);
-					ss->patch(AS_ADDRESS(0x0022f5c4), 0x17);
-					ss->patch(AS_ADDRESS(0x0022fab2), 0x17);
-					ss->patch(AS_ADDRESS(0x002d0f1a), 0x17);
-					ss->patch(AS_ADDRESS(0x002d3df0), 0x17);
-					break;
-				}
-				case 2: {
-					ss->patch(AS_ADDRESS(0x002624e5), 0x17);
-					ss->patch(AS_ADDRESS(0x00262625), 0x17);
-					ss->patch(AS_ADDRESS(0x00262565), 0x17);
-					ss->patch(AS_ADDRESS(0x00268c32), 0x17);
-					ss->patch(AS_ADDRESS(0x002694e9), 0x17);
-					ss->patch(AS_ADDRESS(0x0026941d), 0x17);
-					ss->patch(AS_ADDRESS(0x003aefda), 0x17);
-					ss->patch(AS_ADDRESS(0x003b4a11), 0x17);
-					break;
-				}
-			}
-			// ss->patch()
-			#endif
+			// switch(arch) {
+			// 	case 1: {
+			// 		ss->patch(AS_ADDRESS(0x0022cbbc), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x0022cc34), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x0022f5c4), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x0022fab2), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x002d0f1a), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x002d3df0), 0x17);
+			// 		break;
+			// 	}
+			// 	case 2: {
+			// 		ss->patch(AS_ADDRESS(0x002624e5), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x00262625), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x00262565), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x00268c32), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x002694e9), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x0026941d), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x003aefda), 0x17);
+			// 		ss->patch(AS_ADDRESS(0x003b4a11), 0x17);
+			// 		break;
+			// 	}
+			// }
+			// // ss->patch()
+			// #endif
 		}
 	}
 	namespace TGameObject {
@@ -378,7 +363,8 @@ namespace Techno {
 
 			CCObject *obj = NULL;
 			CCNode* node = NULL;
-			CCNode *node_to_remove = NULL;
+			CCNode *node_to_remove = CCNode::create();
+
 			CCARRAY_FOREACH(self->getChildren(), obj) {
 				node = (CCNode *)obj;
 				if(node->getPositionX() == 284.5f && node->getPositionY() == 160.f) {
@@ -403,6 +389,9 @@ namespace Techno {
 							node2->setPositionX(-52.f);
 						}
 						if(CHECKPOS(50.f, 0.f)) { // 5
+							if(node_to_remove != NULL) {
+								node_to_remove->removeMeAndCleanup();
+							}
 							node_to_remove = node2;
 						}
 						if(CHECKPOS(-150.f, -97.f)) { // 6
@@ -437,7 +426,7 @@ namespace Techno {
 
 			CCObject *obj = NULL;
 			CCNode* node = NULL;
-			CCNode *node_to_remove = NULL;
+			CCNode *node_to_remove = CCNode::create();
 			CCARRAY_FOREACH(self->getChildren(), obj) {
 				node = (CCNode *)obj;
 				if(node->getPositionX() == 284.5f && node->getPositionY() == 160.f) {
@@ -462,6 +451,9 @@ namespace Techno {
 							node2->setPositionX(-52.f);
 						}
 						if(CHECKPOS(50.f, 0.f)) { // 5
+							if(node_to_remove != NULL) {
+								node_to_remove->removeMeAndCleanup();
+							}
 							node_to_remove = node2;
 						}
 						if(CHECKPOS(-150.f, -97.f)) { // 6
@@ -523,7 +515,8 @@ WIN32CAC_ENTRY(inject)
 #ifdef __ANDROID__
 __attribute__((constructor)) void libinit()
 {
-	PatchManager::getSharedState()->init();
+	//PatchManager::getSharedState()->init();
 	Techno::applyHooks();
+	Rainix_LCLoader();
 }
 #endif

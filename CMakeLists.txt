@@ -15,8 +15,15 @@ if(ANDROID)
     add_library(${MODNAME} SHARED
         main.cpp
         gdsymbols.cpp
-        bytepatch.cpp
         networking.cpp
+
+        Rainix/LC/main.cpp
+        Rainix/LC/cJSON.c
+
+        Rainix/LC/KittyMemory/KittyMemory.cpp
+        Rainix/LC/KittyMemory/KittyUtils.cpp
+        Rainix/LC/KittyMemory/MemoryBackup.cpp
+        Rainix/LC/KittyMemory/MemoryPatch.cpp
     )
 
     target_include_directories(${MODNAME} PRIVATE
@@ -30,6 +37,8 @@ if(ANDROID)
         ${CMAKE_CURRENT_SOURCE_DIR}/include/cocos2dx/platform/android
         ${CMAKE_CURRENT_SOURCE_DIR}/include/cocos2dx/platform/third_party/android/prebuit/libcurl/include
         ${CMAKE_CURRENT_SOURCE_DIR}/include/extensions
+	${CMAKE_CURRENT_SOURCE_DIR}/Rainix/LC
+	${CMAKE_CURRENT_SOURCE_DIR}/Rainix/LC/KittyMemory
     )
 
     target_link_libraries(${MODNAME} ${CMAKE_CURRENT_SOURCE_DIR}/libs/${CMAKE_ANDROID_ARCH_ABI}/libcocos2dcpp.so)

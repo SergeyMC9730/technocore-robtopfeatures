@@ -54,6 +54,7 @@ TASK_ANDROID() {
   mv ${UPWD}/gd ${UPWD}/gd_a
   cp -r ${UPWD}/out_a/* ${UPWD}/gd_a/lib/
   cp ${UPWD}/GeometryJump.smali ${UPWD}/gd_a/smali/com/robtopx/geometryjump/
+  cp ${UPWD}/LevelData.plist ${UPWD}/gd_a/assets/
   cp ${UPWD}/AndroidManifest.xml ${UPWD}/gd_a/
   apktool b ${UPWD}/gd_a
   cp ${UPWD}/gd_a/dist/gd.apk ${UPWD}/gdMOD.apk
