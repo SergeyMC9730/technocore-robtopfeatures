@@ -1,3 +1,5 @@
+#pragma once
+
 #include <jni.h>
 #include <dlfcn.h>
 #include "patch.h"
@@ -9,8 +11,6 @@
 #include <array>
 #include <iostream>
 #include <fstream>
-#include "cJSON.h"
-#include "cJSON.c"
 
 using namespace cocos2d;
 

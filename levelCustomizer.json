@@ -1,11 +1,11 @@
 {
     "settings": {
-        "levelCount": 23,
+        "levelCount": 22,
 		"deleteDemonLocks": 1
     },
     "levels": [
         {
-            "name": "Stereo Madness X",
+            "name": "Stereo Madness",
             "difficulty": 1,
             "stars": 1,
             "song": "StereoMadness.mp3"
@@ -66,15 +66,15 @@
 		},
 		{	
 			"name": "Clutterfunk",
-            "difficulty": 11,
-            "stars": 0,
+            "difficulty": 5,
+            "stars": 10,
             "song": "Clutterfunk.mp3"
 		},
 		{
       		"name": "Theory of Everything",
-            "difficulty": 12,
-            "stars": 0,
-            "song": "TheoryOfEverytging.mp3"
+            "difficulty": 5,
+            "stars": 10,
+            "song": "TheoryOfEverything.mp3"
 		},
 		{
       		"name": "Electroman Adventures",
@@ -108,9 +108,9 @@
 		},
 		{
       		"name": "Theory of Everything 2",
-            "difficulty": 2,
+            "difficulty": 6,
             "stars": 14,
-            "song": "Theory of Everything2.mp3"
+            "song": "TheoryOfEverything2.mp3"
 		},
 		{
       		"name": "Geometrical Dominator",
@@ -132,7 +132,7 @@
 		},
 		{
 			"name": "Time Machine 2",
-			"difficulty": 12,
+			"difficulty": 5,
 			"stars": 12,
 			"song": "TimeMachine2.mp3"
 		}

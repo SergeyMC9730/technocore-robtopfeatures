@@ -1,6 +1,8 @@
 #include "includes.h"
 #include <fstream>
 #include "main.h"
+#include "cJSON.h"
+#include "cJSON.c"
 using namespace std;
 
 #define MEMBERBYOFFSET(type, class, offset) *reinterpret_cast<type*>(reinterpret_cast<uintptr_t>(class) + offset)
@@ -89,7 +91,6 @@ bool noJson = 0;
 
 bool (*MenuLayer_init)(MenuLayer*);
 bool MenuLayer_initH(MenuLayer* self) {
-	if (!MenuLayer_init(self)) return false;
 	ActiveHooks = 0;
 
 	if (once) {
@@ -226,7 +227,7 @@ std::string& musicHook(std::string& self, int id) {
 
 
 void ApplyHooks() {
-	HOOK("_ZN9MenuLayer4initEv", MenuLayer_initH, MenuLayer_init);
+	// HOOK("_ZN9MenuLayer4initEv", MenuLayer_initH, MenuLayer_init);
 	HOOK("_ZN10LevelTools16getAudioFileNameEi", musicHook, music);
 	HOOK("_ZN9LevelPage17updateDynamicPageEP11GJGameLevel", pageHook, page);
 	HOOK("_ZN16LevelSelectLayer4initEi", LevelSelectLayerInitHook, LevelSelectLayerInit);

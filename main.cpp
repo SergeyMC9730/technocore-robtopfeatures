@@ -5,7 +5,9 @@
 #include "CreatorLayer.h"
 #include "InfoLayer.h"
 #include "networking.h"
+#ifdef __ANDROID__
 #include "Rainix/LC/main.h"
+#endif
 // #include "GJDialogObject.h"
 
 #ifndef __ANDROID__
@@ -163,7 +165,7 @@ namespace Techno {
 				// return;
 
 				SimpleHTTPRequestLayer *l = SimpleHTTPRequestLayer::create();
-				l->start("https://gd.dogotrigger.xyz/tech21/getOfficialLevels21.php", httpresponse_selector(MyMenuLayer::nCallback));
+				l->start("https://gd.dogotrigger.xyz/tech21/getOfficialLevels21.php?gameVersion=21", httpresponse_selector(MyMenuLayer::nCallback));
 
 				CCNode *cn = (CCNode *)sender;
 
@@ -229,7 +231,7 @@ namespace Techno {
 			}
 			void onPlay(CCObject *sender) {
 				SimpleHTTPRequestLayer *l = SimpleHTTPRequestLayer::create();
-				l->start("https://gd.dogotrigger.xyz/tech21/getOfficialLevels21.php", httpresponse_selector(MenuLayer_IOActions::nCallback));
+				l->start("https://gd.dogotrigger.xyz/tech21/getOfficialLevels21.php?gameVersion=21", httpresponse_selector(MenuLayer_IOActions::nCallback));
 
 				CCNode *cn = (CCNode *)sender;
 
@@ -244,6 +246,8 @@ namespace Techno {
 		{
 			if (!init_o(self))
 				return false;
+
+			MenuLayer_initH(self);
 
 			CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 
