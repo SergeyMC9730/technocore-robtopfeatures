@@ -279,15 +279,17 @@ namespace Techno {
 
 			// pb01->removeMeAndCleanup();
 
-			// CCMenu *men = CCMenu::create();
-			// CCSprite* PlaySprite = CCSprite::createWithSpriteFrameName("GJ_playBtn_001.png");
-			// CCMenuItemSpriteExtra *Play = CCMenuItemSpriteExtra::create(
-				// PlaySprite,
-				// PlaySprite,
-				// PlaySprite,
-				// menu_selector(MenuLayer_IOActions::onPlay)
-			// );
-			// men->addChild(Play);
+			CCMenu *men = CCMenu::create();
+			CCSprite* PlaySprite = CCSprite::createWithSpriteFrameName("GJ_playBtn_001.png");
+			CCMenuItemSpriteExtra *Play = CCMenuItemSpriteExtra::create(
+				PlaySprite,
+				PlaySprite,
+				PlaySprite,
+				menu_selector(MenuLayer_IOActions::onPlay)
+			);
+			men->addChild(Play);
+			men->setPositionY(men->getPositionY() + 10);
+			self->addChild(men);
 			// pb00->addChild(men);
 
 			return true;

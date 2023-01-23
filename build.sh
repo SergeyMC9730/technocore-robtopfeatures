@@ -22,7 +22,7 @@ TASK_WINDOWS() {
     -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN_REPO/clang-cl-msvc.cmake \
     -DCMAKE_BUILD_TYPE=Release -B build
     
-  cmake --build ${UPWD}/build --config Release
+  cmake --build ${UPWD}/build --config Release -j $(nproc)
   cp ${UPWD}/build/TechnoGDPS.dll "/home/dog/.wine/drive_c/Program Files (x86)/VOIDSERVER/GDVS/gdvs-dll/techno.21.dll"
 }
 TASK_ANDROID() {
@@ -37,14 +37,14 @@ TASK_ANDROID() {
   mkdir ${UPWD}/out_a/armeabi
   cd ${UPWD}/build_a
   cmake ${UPWD} -DCMAKE_ANDROID_NDK=$NDK -DCMAKE_ANDROID_ARCH_ABI=x86 -DANDROID=1 -G "Ninja"
-  cmake --build ${UPWD}/build_a
+  cmake --build ${UPWD}/build_a -j $(nproc)
   cd ${UPWD}
   mv ${UPWD}/out_a/libgdmod.so ${UPWD}/out_a/x86
   rm -rf ${UPWD}/build_a
   mkdir ${UPWD}/build_a
   cd ${UPWD}/build_a
   cmake ${UPWD} -DCMAKE_ANDROID_NDK=$NDK -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DANDROID=1 -G "Ninja"
-  cmake --build ${UPWD}/build_a
+  cmake --build ${UPWD}/build_a -j $(nproc)
   cd ${UPWD}
   mv ${UPWD}/out_a/libgdmod.so ${UPWD}/out_a/armeabi-v7a
   rm -rf ${UPWD}/build_a
